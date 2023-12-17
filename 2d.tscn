@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://b2mdcuhk13m5t"]
+
+[ext_resource type="Shader" path="res://scripts/2d_asdf.gdshader" id="1_k8u8s"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j0kp8"]
+shader = ExtResource("1_k8u8s")
+shader_parameter/cloudscale = 1.1
+shader_parameter/speed = 0.01
+shader_parameter/clouddark = 0.5
+shader_parameter/cloudlight = 0.3
+shader_parameter/cloudcover = 0.2
+shader_parameter/cloudalpha = 8.0
+shader_parameter/skytint = 0.5
+shader_parameter/skycolour1 = Vector3(0.2, 0.4, 0.6)
+shader_parameter/skycolour2 = Vector3(0.4, 0.7, 1)
+shader_parameter/m = Transform2D(1.6, -1.2, 1.2, 1.6, 0, 0)
+
+[sub_resource type="Gradient" id="Gradient_kbcms"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_83e0m"]
+gradient = SubResource("Gradient_kbcms")
+width = 128
+height = 128
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Icon" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_j0kp8")
+position = Vector2(64, 64)
+texture = SubResource("GradientTexture2D_83e0m")
+
+[node name="Icon2" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_j0kp8")
+position = Vector2(1761.5, 968)
+scale = Vector2(27.5234, 15.125)
+texture = SubResource("GradientTexture2D_83e0m")

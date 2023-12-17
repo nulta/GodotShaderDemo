@@ -1,0 +1,29 @@
+[gd_resource type="VisualShader" load_steps=2 format=3 uid="uid://iidqdi76jd5w"]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_rysgj"]
+input_name = "uv"
+
+[resource]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+
+
+
+void fragment() {
+// Input:2
+	vec2 n_out2p0 = UV;
+
+
+// Output:0
+	COLOR.rgb = vec3(n_out2p0, 0.0);
+
+
+}
+"
+mode = 1
+flags/light_only = false
+nodes/fragment/0/position = Vector2(460, 100)
+nodes/fragment/2/node = SubResource("VisualShaderNodeInput_rysgj")
+nodes/fragment/2/position = Vector2(120, 100)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0)

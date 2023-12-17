@@ -1,9 +1,10 @@
-[gd_scene load_steps=17 format=3 uid="uid://bkvj67crr6wtg"]
+[gd_scene load_steps=18 format=3 uid="uid://bkvj67crr6wtg"]
 
 [ext_resource type="Script" path="res://scripts/environment_script.gd" id="1_wtxa4"]
 [ext_resource type="Shader" uid="uid://co7717ymf1qhi" path="res://scripts/ocean_shader.tres" id="2_qmpr4"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="3_5r41l"]
 [ext_resource type="AudioStream" uid="uid://cwrl0bjguuvol" path="res://assets/sea.mp3" id="4_n5i3m"]
+[ext_resource type="PackedScene" uid="uid://prh35jb6tjtd" path="res://assets/sophia/sophia_skin.tscn" id="5_ko204"]
 
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_ngsgg"]
 rayleigh_color = Color(0.0941176, 0.384314, 0.929412, 1)
@@ -60,7 +61,7 @@ material = SubResource("StandardMaterial3D_2kxrx")
 size = Vector3(0.5, 10, 0.5)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ye11y"]
-height = 1.8
+height = 1.6
 
 [node name="World" type="Node3D"]
 
@@ -272,11 +273,18 @@ skeleton = NodePath("../MeshInstance3D")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.38625, 4.93301, -0.0122871)
 script = ExtResource("3_5r41l")
 
-[node name="Camera3D" type="Camera3D" parent="Player"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.690204, 0.00388908)
+[node name="CameraSpot" type="Marker3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.53716, 0)
+gizmo_extents = 0.61
+
+[node name="Camera3D" type="Camera3D" parent="Player/CameraSpot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.56709)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
 shape = SubResource("CapsuleShape3D_ye11y")
+
+[node name="Sophia" parent="Player" instance=ExtResource("5_ko204")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -0.8, 0)
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 14.248, 10)

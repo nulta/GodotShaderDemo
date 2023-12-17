@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-@onready var _camera = $Camera3D
+@onready var _camera = $CameraSpot
 @onready var _world = %WorldEnvironment
 const speed = 8.0  # meters per second
 const gravity = 9.8 * 1.1  # meters per second^2
@@ -13,6 +13,17 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
+	var is_idle = true
+	
+	# camera movement
+	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		var mouse = Input.get_last_mouse_velocity() * mouse_sensitivity * -1.0
+		_camera.rotation.y += mouse.x
+		_camera.rotation.x += mouse.y
+		
+		#var mouse_wheel = Input.is_mouse_button_pressed(MOUSE_BUTTON_WHEEL_DOWN)
+
+	# move vector
 	var movement = Input.get_vector("move_backward", "move_forward", "move_left", "move_right")
 	movement = movement.normalized()
 
@@ -22,14 +33,29 @@ func _physics_process(delta: float) -> void:
 	velocity.x = target_velocity.x
 	velocity.z = target_velocity.z
 	
+	# moved?
+	var moved = target_velocity.length_squared() > 0.1
+	if moved:
+		rotation.y += _camera.rotation.y
+		_camera.rotation.y = 0.0
+		if is_on_floor():
+			is_idle = false
+			($Sophia).move()
+	
 	# Jumping
 	if Input.is_action_pressed("move_jump") and is_on_floor():
 		velocity += jump_vector
+		is_idle = false
+		($Sophia).jump()
 	
 	# Gravity
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 		velocity.y = max(-53.0, velocity.y)  # Terminal velocity (53m/s or 200km/h)
+		if velocity.y < 0:
+			($Sophia).fall()
+	elif is_idle:
+		($Sophia).idle()
 	
 	# Respawn (+day/night)
 	if position.y < -100:
@@ -40,10 +66,6 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 func _process(_delta: float) -> void:
-	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-		var mouse = Input.get_last_mouse_velocity() * mouse_sensitivity * -1.0
-		rotation.y += mouse.x
-		_camera.rotation.x += mouse.y
 	
 	# ESC -> release mouse
 	if Input.is_action_pressed("ui_cancel"):
